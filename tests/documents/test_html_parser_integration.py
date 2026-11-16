@@ -257,8 +257,9 @@ class TestPerformanceIntegration:
         doc = parse_html(html)
         elapsed = time.perf_counter() - start
 
-        # Should parse in under 1 second for typical filing
-        assert elapsed < 1.2, f"Parse time {elapsed:.3f}s exceeds 1s threshold"
+        # Wall-clock on a shared CI runner: a regression guard, not a benchmark.
+        # Typical parse is ~1s; 1.2s flaked (1.34s seen on main), so allow 3s.
+        assert elapsed < 3.0, f"Parse time {elapsed:.3f}s exceeds 3s threshold"
 
     @pytest.mark.network
     def test_memory_efficiency(self):
